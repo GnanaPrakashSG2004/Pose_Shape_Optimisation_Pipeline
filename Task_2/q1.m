@@ -18,6 +18,8 @@ M(:, 2) = M(:, 2) * 3.8600 / l;
 M(:, 1) = M(:, 1) * 1.6362 / w;
 M(:, 3) = M(:, 3) * 1.5208 / h;
 
+writematrix(M, 'scaledMeanShape.txt', 'Delimiter', 'space');
+
 nexttile;
 visualizeWireframe3D(M');
 title('After adjustment');
