@@ -1,1 +1,0 @@
-Link to the slides I have prepared as part of this task can be found [here](https://www.canva.com/design/DAFZtxaLbLQ/Xf7UhIvKjwqkJFeGFSx5LA/view?utm_content=DAFZtxaLbLQ&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
