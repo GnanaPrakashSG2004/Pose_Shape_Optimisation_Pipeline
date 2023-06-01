@@ -4,6 +4,7 @@
 ### What the scripts do:
 - `distinguishable_colors.m`: Generates visually different colors for plotting
 - `getTracklets.m`: Extracts all the required fields from the tracklets obtained from the `readLabels.m` script given in the `devkit` package
+  - This script requires the directory path to the labels relative to the `devkit/matlab` directory
 - `mobili.m`: Generates the 3D bounding box projection using the tracklet data
   - This script is implemented based on the paper [Robust Scale Estimation in Real-Time Monocular SFM for Autonomous Driving](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6909599&tag=1)
   - This script requires the directory path to the labels relative to the `devkit/matlab` directory

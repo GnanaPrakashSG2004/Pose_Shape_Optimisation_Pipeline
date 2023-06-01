@@ -1,4 +1,5 @@
 function trackletFields = getTracklets(seq, frm, id, label_dir)
+% label_dir directory path must be relative to './devkit/matlab' directory
 
 trackletFields = [];
 
