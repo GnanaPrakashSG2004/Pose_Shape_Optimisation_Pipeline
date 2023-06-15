@@ -15,7 +15,6 @@ function [mean_shape_arr, def_vectors_arr, img_coords_arr] = alignMeanShape(seq,
   tracklet_data = getTracklets(seq, frm, id, label_dir);
   ry_arr = [ry_arr; tracklet_data(:, 8) + offset_angle];
   
-  
   mean_shape = readmatrix(mean_shape_file);
   mean_shape = reorientMeanShape(scaleMeanShape(mean_shape));
   
@@ -26,19 +25,16 @@ function [mean_shape_arr, def_vectors_arr, img_coords_arr] = alignMeanShape(seq,
     mean_rot = mean_shape * rot_matrix;
     mean_trans = mean_rot + B(i, :);
     mean_shape_arr = [mean_shape_arr; mean_trans];
-    
-    % for j=1:3:40
-    %   x_def_rot = [x_def_rot, def_vectors(:, j) * cos(ry_arr(i)) + def_vectors(:, j + 2) * sin(ry_arr(i))];
-    %   y_def = [y_def, def_vectors(:, j + 1)];
-    %   z_def_rot = [z_def_rot, def_vectors(:, j + 2) * cos(ry_arr(i)) - def_vectors(:, j) * sin(ry_arr(i))];
-    % end
-    % for j=1:14
-    %   def_vectors_rot = [def_vectors_rot, x_def_rot(:, j), y_def(:, j), z_def_rot(:, j)];
-    % end
-    % def_vectors_arr = [def_vectors_arr; def_vectors_rot];
+
+    def_vectors_rot = zeros(5, 42);
+
+    for j=1:3:40
+      def_vectors_rot(:, j:j+2) = def_vectors(:, j:j+2) * rot_matrix; 
+    end
+
+    def_vectors_arr = [def_vectors_arr; def_vectors_rot];
 
     img_coords = mean_trans * K';
     img_coords_arr = [img_coords_arr; img_coords(:, 1) ./ img_coords(:, 3), img_coords(:, 2) ./ img_coords(:, 3)];
-    disp(img_coords_arr)
   end
 end
