@@ -18,7 +18,7 @@ function [B, finalError] = mobili(seq, frm, id, label_dir)
   for i=1:numel(seq)
     b = [(trackletFields(i, 4) + trackletFields(i, 6)) / 2, trackletFields(i, 7), 1]'; % Midpoint from left and right ends and on the bottom part
     proj = -(h * inv(K) * b) / (n' * inv(K) * b);
-    proj = proj + [0; -avgCarHeight/2; avgCarLength/2]; % In 3D, move down in vertical direction and move inward to arrive at midpoint of 3D projection cube
+    proj = proj + [0; -avgCarHeight/2; avgCarLength/2]; % In 3D, move up in vertical direction and move inward to arrive at midpoint of 3D projection cube
     B = [B; proj'];
     finalError = [finalError; abs(proj' - trackletFields(i, 9:11))];
   end
