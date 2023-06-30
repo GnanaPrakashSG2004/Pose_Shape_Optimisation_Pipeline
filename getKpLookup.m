@@ -1,3 +1,4 @@
 function kp_lookup_matrix = getKpLookup(kpLookupFile)
-  kp_lookup_matrix = readmatrix(kpLookupFile);
+  kpLookup_struct = load(kpLookupFile);
+  kp_lookup_matrix = kpLookup_struct.kpLookup';
 end
