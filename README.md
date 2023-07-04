@@ -11,7 +11,7 @@
 ### What the scripts do:
 - `alignMeanShape.m`: Performs rotation and translation on the mean shape and deformation vectors of the car based on the alignment of the car labels with the camera and also returns the coordinates of the mean shape projected onto the image
 - `distinguishable_colors.m`: Generates visually different colors for plotting
-- `getKpNetMatrix.m`: Returns a matrix containing the 2D pixel coordinates of the keypoints of each of the car labels along with their confidence values
+- `getKpNetMatrix.m`: Returns a matrix containing the 2D pixel coordinates of the keypoints of each of the car labels along with their confidence values. Also resizes the image coordinates so that the coordinates are relative to the original image of the car and not just the scaled bounding box of the car, with dimensions 64*64 
 - `getTracklets.m`: Extracts all the required fields from the tracklets obtained from the `readLabels.m` script given in the `devkit` package
   - This script requires the directory path to the labels relative to the `devkit/matlab` directory
 - `mobili.m`: Generates the 3D bounding box projection using the tracklet data
@@ -20,7 +20,6 @@
 - `plotKpLocalization.m`: Plots the predicted image coordinates of the keypoints of the car on the image of the car
 - `reorientDeformationVectors.m`: Reorients the deformation vectors based on the standards followed in the KITTI dataset
 - `reorientMeanShape.m`: Reorients the mean shape vector based on the standards followed in the KITTI dataset
-- `rescaleKpData.m`: Resizes the image coordinates so that the coordinates are relative to the original image of the car and not just the scaled bounding box of the car, with dimensions 64*64 
 - `scaleMeanShape.m`: Scales the dimensions of the mean shape vector based on given average dimensions of the car
 - `seqFrmId.m`: Helper script to return the `seq`, `frm` and `id` arrays used in all other files
 - `trackletInstances.m`: Returns an array containing 8 attributes for each of the required instances

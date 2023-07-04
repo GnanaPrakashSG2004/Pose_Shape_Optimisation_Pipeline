@@ -1,9 +1,9 @@
-function W = kpWeights(kpNetOutputFile, kpLookupFile, seq, frm, id, label_dir)
+function W = kpWeights(seq, frm, id, label_dir, kpNetOutputFile, kpLookupFile)
   tracklet_data = getTracklets(seq, frm, id, label_dir);
   ry = rad2deg(tracklet_data(:, 8) + pi/2)';
   ry_int = round(ry);
 
-  kpNetOutput = getKpNetMatrix(kpNetOutputFile);
+  kpNetOutput = getKpNetMatrix(seq, frm, id, label_dir, kpNetOutputFile);
   Wkps = [];
   for i=1:numel(ry_int)
     Wkps = [Wkps, kpNetOutput(:, 3, i)];
