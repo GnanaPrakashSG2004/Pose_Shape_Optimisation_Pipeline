@@ -27,3 +27,6 @@
 ## Task 6:
 - At this point, we use ceres to further improve the predictions
 - First, we get the weights matrix corresponding to the predicted keypoints
+- Then, we create a file containing all the required info for the ceres pose optimizer
+- The optimizer generates a rotation and translation matrix for each of the 6 cars, which improves the pose estimates
+<hr>

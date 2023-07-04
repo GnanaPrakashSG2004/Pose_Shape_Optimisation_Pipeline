@@ -10,9 +10,12 @@
 
 ### What the scripts do:
 - `alignMeanShape.m`: Performs rotation and translation on the mean shape and deformation vectors of the car based on the alignment of the car labels with the camera and also returns the coordinates of the mean shape projected onto the image
+- `ceresPoseOptimizer.m`: Creates the input file required by the `singleViewPoseAdjuster.cc` script in the `ceres` directory. Then, executes this script and returns the optimized pose of the cars
 - `distinguishable_colors.m`: Generates visually different colors for plotting
+- `getKpLookup.m`: Returns the lookup table for the keypoints of the cars
 - `getKpNetMatrix.m`: Returns a matrix containing the 2D pixel coordinates of the keypoints of each of the car labels along with their confidence values. Also resizes the image coordinates so that the coordinates are relative to the original image of the car and not just the scaled bounding box of the car, with dimensions 64*64 
 - `getTracklets.m`: Extracts all the required fields from the tracklets obtained from the `readLabels.m` script given in the `devkit` package
+- `kpWeights.m`: Returns the weight matrix corresponding to the keypoints of the cars based on both their confidence values and also the lookup table
   - This script requires the directory path to the labels relative to the `devkit/matlab` directory
 - `mobili.m`: Generates the 3D bounding box projection using the tracklet data
   - This script is implemented based on the paper [Robust Scale Estimation in Real-Time Monocular SFM for Autonomous Driving](https://ieeexplore.ieee.org/document/6909599)
@@ -32,6 +35,7 @@
 <hr>
 
 ### Other files and directories:
+- `ceres`: Contains the single view pose and shape optimizer scripts and their definitions
 - `devkit`: Contains the scripts for processing the KITTI dataset
 - `Left_Colour_Images`: Contains the left colour images of the KITTI dataset
 - `training`: Contains the training labels of the KITTI dataset
