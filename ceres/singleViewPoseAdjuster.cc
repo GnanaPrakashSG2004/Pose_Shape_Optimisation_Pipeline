@@ -98,8 +98,10 @@ int main(int argc, char** argv){
 	double rotMat[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
 	double trans[3] = {1, 1, 1};
 	// Convert the rotation estimate to an axis-angle representation
-	double rotAngleAxis[3] = {0.001, 1, 0.001};
-	// ceres::RotationMatrixToAngleAxis(rot, rotAngleAxis);
+	double rotAngleAxis[3];
+	double rot[9];
+	for (int i = 0; i < 9; i++) rot[i] = rotMat[i];
+	ceres::RotationMatrixToAngleAxis(rot, rotAngleAxis);
 	// std::cout << "rotAngleAxis: " << rotAngleAxis[0] << " " << rotAngleAxis[1] << " " << rotAngleAxis[2] << std::endl;
 
 

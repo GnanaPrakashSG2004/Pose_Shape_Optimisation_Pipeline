@@ -637,19 +637,24 @@ struct PnPError{
 		P_[1] = T(X_[1]) + T(l_[0])*T(v_[1]) + T(l_[1])*T(v_[4]) + T(l_[2])*T(v_[7]) + T(l_[3])*T(v_[10]) + T(l_[4])*T(v_[13]);
 		P_[2] = T(X_[2]) + T(l_[0])*T(v_[2]) + T(l_[1])*T(v_[5]) + T(l_[2])*T(v_[8]) + T(l_[3])*T(v_[11]) + T(l_[4])*T(v_[14]);
 
-		// Rotate the point (and store the result in the same variable)
-		// Order of arguments passed: (axis-angle rotation vector (size 3), point (size 3), array where result is to be stored (size 3))
-		ceres::AngleAxisRotatePoint(rot, P_, P_);
+		// // Rotate the point (and store the result in the same variable)
+		// // Order of arguments passed: (axis-angle rotation vector (size 3), point (size 3), array where result is to be stored (size 3))
+		// ceres::AngleAxisRotatePoint(rot, P_, P_);
+		
+		// The above is wrong. Inplace rotation not allowed by ceres
+		T P_temp_[3];
+		ceres::AngleAxisRotatePoint(rot, P_, P_temp_);
+		
 		// Add the translation
-		P_[0] = T(P_[0]) + trans[0];
-		P_[1] = T(P_[1]) + trans[1];
-		P_[2] = T(P_[2]) + trans[2];
+		P_temp_[0] = T(P_temp_[0]) + trans[0];
+		P_temp_[1] = T(P_temp_[1]) + trans[1];
+		P_temp_[2] = T(P_temp_[2]) + trans[2];
 
 		// Project the obtained 3D point down to the image, using the intrinsics (K)
 		T p_[3];
-		p_[0] = T(K_[0])*P_[0] + T(K_[1])*P_[1] + T(K_[2])*P_[2];
-		p_[1] = T(K_[3])*P_[0] + T(K_[4])*P_[1] + T(K_[5])*P_[2];
-		p_[2] = T(K_[6])*P_[0] + T(K_[7])*P_[1] + T(K_[8])*P_[2];
+		p_[0] = T(K_[0])*P_temp_[0] + T(K_[1])*P_temp_[1] + T(K_[2])*P_temp_[2];
+		p_[1] = T(K_[3])*P_temp_[0] + T(K_[4])*P_temp_[1] + T(K_[5])*P_temp_[2];
+		p_[2] = T(K_[6])*P_temp_[0] + T(K_[7])*P_temp_[1] + T(K_[8])*P_temp_[2];
 
 
 		// T p[3];
