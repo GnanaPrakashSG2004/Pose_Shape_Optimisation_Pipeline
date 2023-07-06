@@ -10,7 +10,7 @@
 
 ### What the scripts do:
 - `alignMeanShape.m`: Performs rotation and translation on the mean shape and deformation vectors of the car based on the alignment of the car labels with the camera and also returns the coordinates of the mean shape projected onto the image
-- `ceresPoseOptimizer.m`: Creates the input file required by the `singleViewPoseAdjuster.cc` script in the `ceres` directory. Then, executes this script and returns the optimized pose of the cars
+- `ceresPoseOptimizer.m`: Creates the input file required by the `singleViewPoseAdjuster.cc` script in the `ceres` directory. Then, executes this script and returns the image coordinates of the optimized pose of the cars
 - `distinguishable_colors.m`: Generates visually different colors for plotting
 - `getKpLookup.m`: Returns the lookup table for the keypoints of the cars
 - `getKpNetMatrix.m`: Returns a matrix containing the 2D pixel coordinates of the keypoints of each of the car labels along with their confidence values. Also resizes the image coordinates so that the coordinates are relative to the original image of the car and not just the scaled bounding box of the car, with dimensions 64*64 
