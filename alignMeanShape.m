@@ -22,13 +22,13 @@ function [mean_shape_arr, def_vectors_arr, img_coords_arr] = alignMeanShape(seq,
   
   for i=1:numel(ry_arr)
     rot_matrix = [cos(ry_arr(i)), 0, sin(ry_arr(i)); 0, 1, 0; -sin(ry_arr(i)), 0, cos(ry_arr(i))];
-    mean_rot = mean_shape * rot_matrix;
+    mean_rot = mean_shape * rot_matrix';
     mean_trans = mean_rot + B(i, :);
     mean_shape_arr(:, :, i) = mean_trans;
 
     def_vectors_rot = zeros(5, 42);
     for j=1:3:40
-      def_vectors_rot(:, j:j+2) = def_vectors(:, j:j+2) * rot_matrix; 
+      def_vectors_rot(:, j:j+2) = def_vectors(:, j:j+2) * rot_matrix'; 
     end
 
     def_vectors_arr(:, :, i) = def_vectors_rot;
