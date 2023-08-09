@@ -69,3 +69,69 @@
 - This cost function ensures that the height of the point is of appriopriate magnitude from the ground plane, so that the wireframe of the car is of appropriate shape
 - The residuals are computed just by calculating the difference of the `Y`-coordinate of the predicted location of the point and the expected height of the point
 <hr>
+
+## LaplacianSmoother:
+- Laplacian smoother regularizer is used to prevent overfitting of models
+- This works by minimising the distance of the point from the mean position of its neighbours
+- The residuals are calculated by just taking the difference of the predicted location of the point and the mean location of its neighbours
+- This cost function helps in smoothing of polynomial meshes, which in our case is the wireframe of the car
+<hr>
+
+## ParallelLines:
+- Cost function to penalise when two lines, one joining p1 and p2 and the other joining p3 and p4 are not parallel
+- Their parallel nature is calculated by taking the cross product of the two lines using the coordinates of the corresponding points
+- The residuals are just the cross products of the two lines scaled by a factor of `5`
+<hr>
+
+## PerpendicularLines:
+- Cost function to penalise if line joining p1 and p2 is not perpendicular to the line joining p2 and p3
+- Perpendicularity is calculated by taking the dot product of the two lines using the coordinates of the corresponding points
+- The residuals are just the dot products of the two lines scaled by a factor of `5`
+<hr>
+
+## LambdaReprojectionError:
+- We calculate the 3D point coordinates from the predicted 3D point and also the weighted deformation vector coordinates
+- We then project these to the corresponding 2D coordinates using the camera intrinsics matrix `K` and the concepts of homogeneous coordinates
+- The residuals are then just the difference of the calculated 2D coordinates and the observed 2D keypoints multiplied by the corresponding square roots of the weights
+<hr>
+
+## LambdaAlignmentError:
+- The 3D point coordinates are calculated similarly from the predicted 3D point and the weighted deformation vector coordinates
+- The residuals are just the difference of the calculated 3D coordinates and the observed 3D keypoints multiplied by the corresponding square roots of the weights
+- This cost function is used to ensure that our predictions dont move too far from our initial guess of where the point must be present
+  - It is to this location that we are 'soft' regularizing our predictions to
+<hr>
+
+## LambdaRegularizer:
+- This cost function is used to ensure that the influence of the lamdas is not too strong on the deformation of the shape of the car
+- The residuals are just the weighted sum of the deformation vector coordinates, where the weights are the corresponding lambdas of the vectors
+<hr>
+
+## LambdaRegularizerWeighted:
+- This cost function is similar to the LambdaRegularizer cost function except for the calculation of the residuals
+- The residuals are `5` in number (one for each of the lambdas) which are just the products of the lambda values and their corresponding square roots of the weights
+<hr>
+
+## TranslationRegularizer:
+- This cost function ensures that there is no huge drift of the translation estimate from the initial estimate
+- The residuals are just the scaled down values of the translation estimates
+<hr>
+
+## RotationRegularizer:
+- This cost function ensures that the angle of rotation is maximally aligned to the Y-axis
+- The residuals for the X and Z axes are majorly scaled up to hevaily penalize the deviation from the Y-axis
+- The residual for the Y-axis is just 0 as the normal has been initialised to 1 initially as well
+<hr>
+
+## PnPError:
+- This cost function is to optimise the PnP Error and to improve the Rotation matrix R and the translation vector t estimates
+- We first calculate the 3D point coordinates from the predicted 3D point and the weighted deformation vector coordinates
+- After this, we rotate this point using the angle axis matrix that has been updated till this point to rotate the point accordingly along the appropriate axis by the required angle
+  - Here, a note regarding ceres implementation: The resulting point must be stored in another array as inplace rotation is not supported
+  - The square of the angle (in radians) is obtained using the dot product of the angle axis matrix with itself since the direction vector is of unit magnitude
+  - We then use the rodriguez formula to calculate the resulting coordinates if the angle is non-zero
+  - Else, we use the Taylor series approximation to calculate the resulting coordinates to avoid division by zero
+- Then, the translation estimate is added to the rotated point to obtain the final 3D coordinates
+- This predicted 3D point is then projected to the 2D system using the camera intrinsics matrix and the concepts of homogeneous coordinates
+- Finally, the residuals are calculated by just taking the difference of the calculated 2D coordinates and the observed 2D keypoints multiplied by the corresponding square roots of the weights
+<hr>
