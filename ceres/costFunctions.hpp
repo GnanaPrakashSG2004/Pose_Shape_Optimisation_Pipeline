@@ -440,23 +440,23 @@ struct LambdaReprojectionError{
 	bool operator() (const T* const rot_, const T* const l, T* residuals) const {
 
 		// 3D wireframe (before applying rotation and translation)
-		T P_[3];
+		T P_[3], P_temp_[3];
 		// Initialize the 3D point
 		P_[0] = T(X_[0]) + T(l[0])*T(v_[0]) + T(l[1])*T(v_[3]) + T(l[2])*T(v_[6]) + T(l[3])*T(v_[9]) + T(l[4])*T(v_[12]);
 		P_[1] = T(X_[1]) + T(l[0])*T(v_[1]) + T(l[1])*T(v_[4]) + T(l[2])*T(v_[7]) + T(l[3])*T(v_[10]) + T(l[4])*T(v_[13]);
 		P_[2] = T(X_[2]) + T(l[0])*T(v_[2]) + T(l[1])*T(v_[5]) + T(l[2])*T(v_[8]) + T(l[3])*T(v_[11]) + T(l[4])*T(v_[14]);
 
 		// Apply the rotation and translation
-		ceres::AngleAxisRotatePoint(rot_, P_, P_);
-		P_[0] += T(trans_[0]);
-		P_[1] += T(trans_[1]);
-		P_[2] += T(trans_[2]);
+		ceres::AngleAxisRotatePoint(rot_, P_, P_temp_);
+		P_temp_[0] += T(trans_[0]);
+		P_temp_[1] += T(trans_[1]);
+		P_temp_[2] += T(trans_[2]);
 
 		// Project the obtained 3D point down to the image, using the intrinsics (K)
 		T p_[3];
-		p_[0] = T(K_[0])*P_[0] + T(K_[1])*P_[1] + T(K_[2])*P_[2];
-		p_[1] = T(K_[3])*P_[0] + T(K_[4])*P_[1] + T(K_[5])*P_[2];
-		p_[2] = T(K_[6])*P_[0] + T(K_[7])*P_[1] + T(K_[8])*P_[2];
+		p_[0] = T(K_[0])*P_temp_[0] + T(K_[1])*P_temp_[1] + T(K_[2])*P_temp_[2];
+		p_[1] = T(K_[3])*P_temp_[0] + T(K_[4])*P_temp_[1] + T(K_[5])*P_temp_[2];
+		p_[2] = T(K_[6])*P_temp_[0] + T(K_[7])*P_temp_[1] + T(K_[8])*P_temp_[2];
 		
 		T px_ = p_[0] / p_[2];
 		T py_ = p_[1] / p_[2];
