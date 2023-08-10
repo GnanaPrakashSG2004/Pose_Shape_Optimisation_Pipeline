@@ -36,6 +36,8 @@
 
 ### Other files and directories:
 - `ceres`: Contains the single view pose and shape optimizer scripts and their definitions
+  - `ceres/costFunctions.md`: Notes on various cost function implementations
+  - `ceres/poseAdjustment.md`: Notes on how the pose adjustment is done explaining the usage of `problemStructs.hpp` and the pose adjustment script `singleViewPoseAdjuster.cc`
 - `devkit`: Contains the scripts for processing the KITTI dataset
 - `Left_Colour_Images`: Contains the left colour images of the KITTI dataset
 - `training`: Contains the training labels of the KITTI dataset
