@@ -32,11 +32,11 @@
 
 ## WeightedKeypointReprojectionError:
 - This implementation is similar to that of the normal keypoint reprojection error calculations but the difference is in the calculations of the residuals
-- The residuals are calculated by multiplying the difference of the predicted keypoint coordinates and the observed coordinates with the square root of the corresponding weight
+- The residuals are calculated by multiplying the difference of the predicted keypoint coordinates and the observed coordinates with the square root of the weight
 - This error is more useful in the implementation of the IRLS scheme
-  - The IRLS - Iteratively Reweighted Least Squares scheme is the modified version of the least squares scheme where weights are assigned to each of the residuals and the residuals are multiplied by the square root of the corresponding weight
-  - These weights are introduced to reduce the influence of outliers and occlusions in the data
-  - They are calculated and modified in each iteration depending on the current variance of the residuals
+  - The IRLS - Iteratively Reweighted Least Squares scheme is the modified version of the least squares scheme where the residuals are multiplied by the square root of the weight
+  - This weight is introduced to reduce the influence of outliers and occlusions in the data
+  - It is calculated and modified in each iteration depending on the current variance of the residuals
 <hr>
 
 ## RegularizationTerm:
@@ -124,7 +124,7 @@
 <hr>
 
 ## PnPError:
-- This cost function is to optimise the PnP Error and to improve the Rotation matrix R and the translation vector t estimates
+- This cost function is used to optimise the PnP Error and to improve the Rotation matrix R and the translation vector t estimates
 - We first calculate the 3D point coordinates from the predicted 3D point and the weighted deformation vector coordinates
 - After this, we rotate this point using the angle axis matrix that has been updated till this point to rotate the point accordingly along the appropriate axis by the required angle
   - Here, a note regarding ceres implementation: The resulting point must be stored in another array as inplace rotation is not supported
