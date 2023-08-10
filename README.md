@@ -8,6 +8,9 @@
 - [Slide deck](https://www.canva.com/design/DAFl4yGQGcM/QndI1K1yBbSgIfkNqVmq-g/view?utm_content=DAFl4yGQGcM&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
 <hr>
 
+## Cost functions used in the pose and shape optimizer
+- [Slide deck](https://www.canva.com/design/DAFrJvxr8I0/OmEZuU1O8FSOqyie1910BA/view?utm_content=DAFrJvxr8I0&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
+
 ### What the scripts do:
 - `alignMeanShape.m`: Performs rotation and translation on the mean shape and deformation vectors of the car based on the alignment of the car labels with the camera and also returns the coordinates of the mean shape projected onto the image
 - `ceresPoseOptimizer.m`: Creates the input file required by the `singleViewPoseAdjuster.cc` script in the `ceres` directory. Then, executes this script and returns the image coordinates of the optimized pose of the cars
