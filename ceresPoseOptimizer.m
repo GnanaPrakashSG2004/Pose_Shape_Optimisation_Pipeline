@@ -1,4 +1,4 @@
-function pose_optimized_wireframe_img_coords = ceresPoseOptimizer(seq, frm, id, label_dir, kpNetOutputFile, kpLookupFile, mean_shape_file, def_vector_file)
+function [pose_optimized_wireframe_img_coords, transMatrix, rotMatrix] = ceresPoseOptimizer(seq, frm, id, label_dir, kpNetOutputFile, kpLookupFile, mean_shape_file, def_vector_file)
 % label_dir directory path must be relative to './devkit/matlab' directory
   numViews = 1;
   numPts   = 14;

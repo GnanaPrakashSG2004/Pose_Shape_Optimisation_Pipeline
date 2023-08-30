@@ -214,6 +214,14 @@ int main(int argc, char** argv){
 	outFile.open(outputFileName);
 
 	// // Print the values of lambdas
+	ceres::AngleAxisToRotationMatrix(rotAngleAxis, rot);
+	for (int i = 0; i < 3; ++i){
+		for (int j = 0; j < 3; ++j){
+			outFile << rot[i * 3 + j] << " ";
+		}
+		outFile << std::endl;
+	}
+	outFile << trans[0] << " " << trans[1] << " " << trans[2] << std::endl;
 	// std::cout << lambdas[0] << " " << lambdas[1] << " " << lambdas[2] << " " << lambdas[3] << " " << lambdas[4] << std::endl;
 	// std::cout << "rotAngleAxis: " << rotAngleAxis[0] << " " << rotAngleAxis[1] << " " << rotAngleAxis[2] << std::endl;
 
@@ -232,10 +240,12 @@ int main(int argc, char** argv){
 			// 	V[3*numObs*j + 3*i + 2] << std::endl;
 		}
 
-		ceres::AngleAxisRotatePoint(rotAngleAxis, temp, temp);
-		temp[0] += trans[0];
-		temp[1] += trans[1];
-		temp[2] += trans[2];
+		// double temp_not_inplace[3];
+
+		// ceres::AngleAxisRotatePoint(rotAngleAxis, temp, temp_not_inplace);
+		// temp_not_inplace[0] += trans[0];
+		// temp_not_inplace[1] += trans[1];
+		// temp_not_inplace[2] += trans[2];
 
 		// Write the output to file
 		outFile << temp[0] << " " << temp[1] << " " << temp[2] << std::endl;
