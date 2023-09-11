@@ -63,7 +63,7 @@ int main(int argc, char** argv){
 	double initialReprojError = 0.0, finalReprojError = 0.0;
 
 	// Normal to the XZ plane (ground plane)
-	double xzNormal[3] = {0, 1, 0};
+	double xzNormal[3] = {0, -1, 0};
 
 	// Get the center of the car
 	double *carCenter = myProblem.getCarCenter();
@@ -116,9 +116,9 @@ int main(int argc, char** argv){
 	// For each observation, add a standard PnP error (reprojection error) residual block
 	for(int i = 0; i < numObs; ++i){
 		// Create a vector of eigenvalues for the current keypoint
-		double *curEigVec = new double[15];
+		double *curEigVec = new double[126];
 		// std::cout << "curEigVec: ";
-		for(int j = 0; j < 5; ++j){
+		for(int j = 0; j < 42; ++j){
 			curEigVec[3*j+0] = V[3*numObs*j + 3*i + 0];
 			curEigVec[3*j+1] = V[3*numObs*j + 3*i + 1];
 			curEigVec[3*j+2] = V[3*numObs*j + 3*i + 2];
@@ -134,20 +134,20 @@ int main(int argc, char** argv){
 			//new LambdaReprojectionError(X_bar+3*i, observations+2*i, curEigVec, K, observationWeights[i], trans));
 
 
-		ceres::CostFunction *lambdaError = new ceres::AutoDiffCostFunction<LambdaReprojectionError, 2, 3, 5>(
+		ceres::CostFunction *lambdaError = new ceres::AutoDiffCostFunction<LambdaReprojectionError, 2, 3, 42>(
 			new LambdaReprojectionError(X_bar+3*i, observations+2*i, curEigVec, K, observationWeights[i], trans));
 
 
 
 
 		// Add a residual block to the problem
-		problem.AddResidualBlock(lambdaError, new ceres::HuberLoss(0.5), rotAngleAxis, lambdas);
+		problem.AddResidualBlock(lambdaError, new ceres::HuberLoss(0.8), rotAngleAxis, lambdas);
 
 		// Add a regularizer (to prevent lambdas from growing too large)
-		ceres::CostFunction *lambdaRegularizer = new ceres::AutoDiffCostFunction<LambdaRegularizer, 3, 5>(
+		ceres::CostFunction *lambdaRegularizer = new ceres::AutoDiffCostFunction<LambdaRegularizer, 3, 42>(
 			new LambdaRegularizer(curEigVec));
 		// Add a residual block to the problem
-		problem.AddResidualBlock(lambdaRegularizer, new ceres::HuberLoss(0.001), lambdas);
+		problem.AddResidualBlock(lambdaRegularizer, new ceres::HuberLoss(0.1), lambdas);
 
 		// // Create a cost function to regularize 3D keypoint locations (alignment error)
 		// ceres::CostFunction *alignmentError = new ceres::AutoDiffCostFunction<LambdaAlignmentError, 3, 5>(
@@ -214,14 +214,6 @@ int main(int argc, char** argv){
 	outFile.open(outputFileName);
 
 	// // Print the values of lambdas
-	ceres::AngleAxisToRotationMatrix(rotAngleAxis, rot);
-	for (int i = 0; i < 3; ++i){
-		for (int j = 0; j < 3; ++j){
-			outFile << rot[i * 3 + j] << " ";
-		}
-		outFile << std::endl;
-	}
-	outFile << trans[0] << " " << trans[1] << " " << trans[2] << std::endl;
 	// std::cout << lambdas[0] << " " << lambdas[1] << " " << lambdas[2] << " " << lambdas[3] << " " << lambdas[4] << std::endl;
 	// std::cout << "rotAngleAxis: " << rotAngleAxis[0] << " " << rotAngleAxis[1] << " " << rotAngleAxis[2] << std::endl;
 
@@ -232,7 +224,7 @@ int main(int argc, char** argv){
 		temp[1] = X_bar_initial[3*i+1];
 		temp[2] = X_bar_initial[3*i+2];
 
-		for(int j = 0; j < 5; ++j){
+		for(int j = 0; j < 42; ++j){
 			temp[0] += lambdas[j]*V[3*numObs*j + 3*i + 0];
 			temp[1] += lambdas[j]*V[3*numObs*j + 3*i + 1];
 			temp[2] += lambdas[j]*V[3*numObs*j + 3*i + 2];
@@ -240,15 +232,15 @@ int main(int argc, char** argv){
 			// 	V[3*numObs*j + 3*i + 2] << std::endl;
 		}
 
-		// double temp_not_inplace[3];
+		double temp_not_inplace[3];
 
-		// ceres::AngleAxisRotatePoint(rotAngleAxis, temp, temp_not_inplace);
-		// temp_not_inplace[0] += trans[0];
-		// temp_not_inplace[1] += trans[1];
-		// temp_not_inplace[2] += trans[2];
+		ceres::AngleAxisRotatePoint(rotAngleAxis, temp, temp_not_inplace);
+		temp_not_inplace[0] += trans[0];
+		temp_not_inplace[1] += trans[1];
+		temp_not_inplace[2] += trans[2];
 
 		// Write the output to file
-		outFile << temp[0] << " " << temp[1] << " " << temp[2] << std::endl;
+		outFile << temp_not_inplace[0] << " " << temp_not_inplace[1] << " " << temp_not_inplace[2] << std::endl;
 
 		// // Print the output to stdout
 		// std::cout << temp[0] << " " << temp[1] << " " << temp[2] << std::endl;

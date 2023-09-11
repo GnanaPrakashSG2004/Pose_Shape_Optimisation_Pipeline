@@ -1,24 +1,25 @@
 function [mean_shape_arr, def_vectors_arr, img_coords_arr] = alignMeanShape(seq, frm, id, label_dir, mean_shape_file, def_vector_file)
 % label_dir directory path must be relative to './devkit/matlab' directory
   ry_arr = [];
-  mean_shape_arr = zeros(14, 3, numel(seq));
-  def_vectors_arr = zeros(5, 42, numel(seq));
+  mean_shape_arr = zeros(36, 3, numel(seq));
+  def_vectors_arr = zeros(42, 108, numel(seq));
   K = [
         721.53, 0, 609.55;
         0, 721.53, 172.85;
         0, 0, 1;
       ];
-  img_coords_arr = zeros(14, 2, numel(seq));
+  img_coords_arr = zeros(36, 2, numel(seq));
 
   [B, ~] = mobili(seq, frm, id, label_dir);
   offset_angle = pi/2;
   tracklet_data = getTracklets(seq, frm, id, label_dir);
   ry_arr = [ry_arr; tracklet_data(:, 8) + offset_angle];
   
-  mean_shape = readmatrix(mean_shape_file);
+  init_mean_shape = readmatrix(mean_shape_file);
+  mean_shape = init_mean_shape;
   mean_shape = reorientMeanShape(scaleMeanShape(mean_shape));
   
-  def_vectors = reorientDeformationVectors(def_vector_file);
+  def_vectors = reorientDeformationVectors(def_vector_file, init_mean_shape);
   
   for i=1:numel(ry_arr)
     rot_matrix = [cos(ry_arr(i)), 0, sin(ry_arr(i)); 0, 1, 0; -sin(ry_arr(i)), 0, cos(ry_arr(i))];
@@ -26,8 +27,8 @@ function [mean_shape_arr, def_vectors_arr, img_coords_arr] = alignMeanShape(seq,
     mean_trans = mean_rot + B(i, :);
     mean_shape_arr(:, :, i) = mean_trans;
 
-    def_vectors_rot = zeros(5, 42);
-    for j=1:3:40
+    def_vectors_rot = zeros(42, 108);
+    for j=1:3:106
       def_vectors_rot(:, j:j+2) = def_vectors(:, j:j+2) * rot_matrix'; 
     end
 
