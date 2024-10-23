@@ -448,9 +448,9 @@ struct LambdaReprojectionError{
 
 		// Initialize the 3D point
 		for (int i = 0; i < 3*42; i+=3) {
-			P_[0] += T(l_[i / 3])*T(v_[i]);
-			P_[1] += T(l_[i / 3])*T(v_[i+1]);
-			P_[2] += T(l_[i / 3])*T(v_[i+2]);
+			P_[0] += T(l[i / 3])*T(v_[i]);
+			P_[1] += T(l[i / 3])*T(v_[i+1]);
+			P_[2] += T(l[i / 3])*T(v_[i+2]);
 		}
 
 		// Apply the rotation and translation

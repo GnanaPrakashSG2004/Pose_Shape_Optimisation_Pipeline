@@ -1,4 +1,4 @@
-function [] = visualizeWireframe2D(img, wireframe)
+function [] = visualizeWireframe2D_2(img, wireframe)
 % VISUALIZEWIREFRAME2D  Takes in a 2D car wireframe (2 x 14 matrix), and
 % plots it in 2D (on a given image) while appropriately connecting vertices
 

@@ -11,7 +11,7 @@ project(BundleAdjuster)
 # endif(GLOG_FOUND)
 
 # Ceres Solver
-set(Ceres_DIR "/home/gnani-u/ceres-bin/bin")
+set(Ceres_DIR "/home/gp/ceres/ceres-bin/bin")
 message("-- Check for Ceres solver")
 find_package(Ceres REQUIRED)
 if(CERES_FOUND)
